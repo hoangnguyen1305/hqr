@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> {
                             return CDropdown(
                               title: 'Ngân hàng',
                               getName: (e) => e.shortName,
+                              getUrl: (e) => e.logo,
                               context: context,
                               items: state.banks,
                               selectedValue: state.bankData,
@@ -99,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                                   return CDropdown(
                                     title: 'Loại QR',
                                     getName: (e) => e.key,
+                                    getUrl: (e) => '',
                                     context: context,
                                     items: QrType.values,
                                     selectedValue: qrType,

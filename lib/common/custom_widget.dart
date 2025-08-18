@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hqr/common/custom_dialog.dart';
@@ -16,6 +17,7 @@ class CDropdown<T> extends FormField<T> {
     required String title,
     bool isRequired = false,
     required String Function(dynamic) getName,
+    required String Function(dynamic) getUrl,
     double padding = 0,
     String? messageError,
     Color? backgroundColor,
@@ -80,7 +82,7 @@ class CDropdown<T> extends FormField<T> {
                                title: title,
                                isBottomSheet: true,
                                getName: (e) => getName(e),
-                               getUrl: (e) => '',
+                               getUrl: (e) => getUrl(e),
                              ),
                            );
                          },
@@ -459,11 +461,20 @@ class _CSelectModelState<T> extends State<CSelectModel<T>> {
                   const SizedBox(height: 15),
                   Row(
                     children: [
+                      if (widget.getUrl(e).isNotEmpty) ...[
+                        CachedNetworkImage(
+                          imageUrl: widget.getUrl(e),
+                          width: 60,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        const SizedBox(width: 10),
+                      ],
                       Expanded(
                         child: CText(
                           text: widget.getName(e),
                           fontSize: FontSizeRes.subBody,
                           color: ColorRes.textColor,
+                          fontWeight: FontWeight.w500,
                           maxLines: 2,
                         ),
                       ),
