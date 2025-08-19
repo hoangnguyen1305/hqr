@@ -273,14 +273,15 @@ class _CTextFormFieldState extends State<CTextFormField> {
                 color: ColorRes.textColor,
               ),
               children: [
-                TextSpan(
-                  text: ' *',
-                  style: TextStyle(
-                    fontSize: widget.size,
-                    fontWeight: FontWeight.w500,
-                    color: ColorRes.red,
+                if (widget.isRequired)
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      fontSize: widget.size,
+                      fontWeight: FontWeight.w500,
+                      color: ColorRes.red,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

@@ -28,18 +28,29 @@ class _TimeUIState extends State<TimeUI> {
     super.dispose();
   }
 
+  String capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final dateFormatter = DateFormat('EEEE, MMMM d, yyyy');
-    final hourFormatter = DateFormat('HH'); // Giờ: 10
-    final minuteFormatter = DateFormat('mm'); // Phút: 25
+    final dateFormatter = DateFormat('EEEE, d MMMM yyyy', 'vi');
+    final hourFormatter = DateFormat('HH');
+    final minuteFormatter = DateFormat('mm');
     final secondFormatter = DateFormat('ss');
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          dateFormatter.format(_currentTime),
+          capitalize(dateFormatter.format(_currentTime)),
           style: const TextStyle(
             fontSize: FontSizeRes.header * 1.2,
             fontWeight: FontWeight.bold,

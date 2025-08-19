@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                             Expanded(
                               child: CTextFormField(
                                 title: 'Số tiền',
-                                isRequired: true,
+                                isRequired: false,
                                 hintText: 'Nhập số tiền',
                                 controller: _bloc.amountEC,
                                 inputFormatters: [NormalPriceInputFormatter()],
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 10),
                         CTextFormField(
                           title: 'Mô tả',
-                          isRequired: true,
+                          isRequired: false,
                           hintText: 'Nhập mô tả',
                           controller: _bloc.descEC,
                           maxLines: 3,
@@ -186,11 +186,12 @@ class _HomePageState extends State<HomePage> {
                             onError: (error) {
                               CDialogConfirm.show(
                                 context: context,
-                                title: 'Vui lòng quét QR để thanh toán',
+                                title: 'Lỗi',
                                 content: CText(
                                   text: error,
                                   textAlign: TextAlign.center,
                                   fontSize: FontSizeRes.body,
+                                  maxLines: 10,
                                 ),
                               );
                             },
