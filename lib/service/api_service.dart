@@ -2,7 +2,9 @@ import 'package:hqr/contants/const_res.dart';
 import 'package:hqr/model/bank_response.dart';
 import 'package:hqr/model/generate_qr_response.dart';
 import 'package:hqr/model/mst_response.dart';
+import 'package:hqr/model/traffic_response.dart';
 import 'package:hqr/service/dio_client.dart';
+import 'package:hqr/utils/convert_utils.dart';
 
 class ApiService {
   Future<BankResponse> getBanks() async {
@@ -36,6 +38,23 @@ class ApiService {
       return MSTData.fromJson(response.data['data']);
     } catch (_) {
       return MSTData();
+    }
+  }
+
+  Future<List<TrafficViolations>> getTrafficViolations({
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final dio = DioClient().dio.clone();
+      dio.options.baseUrl = ConstRes.trafficDomain;
+      dio.options.headers['x-api-key'] = ConstRes.trafficApiKey;
+      final response = await DioClient().dio.post('', data: body);
+      return ConvertUtils.getList<TrafficViolations>(
+        response.data['trafficViolations'],
+        TrafficViolations.fromJson,
+      );
+    } catch (_) {
+      return [];
     }
   }
 }

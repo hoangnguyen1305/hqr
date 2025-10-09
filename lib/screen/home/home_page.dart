@@ -10,6 +10,7 @@ import 'package:hqr/contants/color_res.dart';
 import 'package:hqr/contants/const_res.dart';
 import 'package:hqr/contants/font_size_res.dart';
 import 'package:hqr/model/bank_response.dart';
+import 'package:hqr/screen/fines/fines_page.dart';
 import 'package:hqr/screen/home/bloc/home_bloc.dart';
 import 'package:hqr/screen/tax_code/tax_code_page.dart';
 import 'package:hqr/utils/enum.dart';
@@ -48,6 +49,13 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               onPressed: () => TaxCodePage.navigate(context),
               icon: Icon(Icons.search_rounded, color: ColorRes.headerColor),
+            ),
+            IconButton(
+              onPressed: () => FinesPage.navigate(context),
+              icon: Icon(
+                Icons.content_paste_search_rounded,
+                color: ColorRes.headerColor,
+              ),
             ),
           ],
         ),

@@ -17,3 +17,25 @@ enum QrType {
   final String key;
   const QrType(this.key);
 }
+
+enum DeviceType {
+  car(1),
+  motobike(2),
+  ebike(3);
+
+  final int idx;
+  const DeviceType(this.idx);
+
+  bool get isCar => this == DeviceType.car;
+
+  String get title {
+    switch (this) {
+      case DeviceType.car:
+        return 'Ô Tô';
+      case DeviceType.motobike:
+        return 'Xe Máy';
+      case DeviceType.ebike:
+        return 'Xe Máy Điện';
+    }
+  }
+}

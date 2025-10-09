@@ -124,12 +124,14 @@ class CDialogConfirm {
                   ],
                 ),
                 const Divider(height: 10, color: ColorRes.grey),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: ConstRes.defaultHorizontal,
-                    vertical: ConstRes.defaultVertical,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: ConstRes.defaultHorizontal,
+                      vertical: ConstRes.defaultVertical,
+                    ),
+                    child: content,
                   ),
-                  child: content,
                 ),
                 const Divider(height: 10, color: ColorRes.grey),
                 Padding(
