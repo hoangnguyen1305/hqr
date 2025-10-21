@@ -39,3 +39,63 @@ enum DeviceType {
     }
   }
 }
+
+enum PlateColor {
+  all(-1),
+  white(0),
+  yellow(3);
+
+  final int idx;
+  const PlateColor(this.idx);
+
+  bool get isWhite => this == PlateColor.white;
+  bool get isYellow => this == PlateColor.yellow;
+  bool get isAll => this == PlateColor.all;
+
+  String get title {
+    switch (this) {
+      case PlateColor.white:
+        return 'Biển Trắng';
+      case PlateColor.yellow:
+        return 'Biển Vàng';
+      case PlateColor.all:
+        return 'Tất Cả';
+    }
+  }
+}
+
+enum VehicleType {
+  car('car'),
+  motobike('motor_bike');
+
+  final String keys;
+  const VehicleType(this.keys);
+
+  bool get isCar => this == VehicleType.car;
+
+  String get title {
+    switch (this) {
+      case VehicleType.car:
+        return 'Ô Tô';
+      case VehicleType.motobike:
+        return 'Xe Máy';
+    }
+  }
+}
+
+enum SortBy {
+  desc('desc'),
+  asc('asc');
+
+  final String keys;
+  const SortBy(this.keys);
+
+   String get title {
+    switch (this) {
+      case SortBy.desc:
+        return 'Giảm dần';
+      case SortBy.asc:
+        return 'Tăng dần';
+    }
+  }
+}

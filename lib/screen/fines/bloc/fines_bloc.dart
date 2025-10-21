@@ -27,7 +27,10 @@ class FinesBloc extends Bloc<FinesEvent, FinesState> {
   Future<void> _onSearch(OnSearch event, Emitter<FinesState> emit) async {
     emit(state.copyWith(screenState: ScreenState.loading));
     final mst = await ApiService().getTrafficViolations(
-      body: {'licensePlate': plateEC.text, 'trafficType': state.deviceType.idx},
+      body: {
+        'licensePlate': plateEC.text.replaceAll('-', '').replaceAll('.', ''),
+        'trafficType': state.deviceType.idx,
+      },
     );
     emit(state.copyWith(screenState: ScreenState.success));
     event.onSuccess.call(mst);

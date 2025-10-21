@@ -5,11 +5,11 @@ import 'package:hqr/model/bank_response.dart';
 import 'package:hqr/service/api_service.dart';
 import 'package:hqr/utils/enum.dart';
 
-part 'home_event.dart';
-part 'home_state.dart';
+part 'gen_qr_event.dart';
+part 'gen_qr_state.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeState()) {
+class GenQRBloc extends Bloc<HomeEvent, HomeState> {
+  GenQRBloc() : super(HomeState()) {
     on<OnInit>(_onInit);
     on<OnGenarateQr>(_onGenarateQr);
     on<OnChangeQrType>(_onChangeQrType);

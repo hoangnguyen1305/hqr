@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hqr/contants/color_res.dart';
 import 'package:hqr/contants/const_res.dart';
 import 'package:hqr/screen/home/home_page.dart';
+import 'package:hqr/utils/app_key_global.dart';
 import 'package:hqr/utils/share_pref.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: ConstRes.appName,
+      navigatorKey: AppKeyGlobal.navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: ColorRes.primaryColor),

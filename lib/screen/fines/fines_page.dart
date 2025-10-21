@@ -68,6 +68,7 @@ class _FinesPageState extends State<FinesPage> {
                       hintText: 'Nhập biển số',
                       inputFormatters: [
                         PlateNumberFormatter(isCar: deviceType.isCar),
+                        LicensePlateFormatter(isCar: deviceType.isCar),
                       ],
                       validator: (_) => _plateValidator(deviceType.isCar),
                       onSubmitted: (_) => _onSubmit(),
@@ -286,7 +287,7 @@ class _FinesPageState extends State<FinesPage> {
   }
 
   String? _plateValidator(bool isCar) {
-    final value = _bloc.plateEC.text;
+    final value = _bloc.plateEC.text.replaceAll('-', '').replaceAll('.', '');
     if (value.isEmpty) {
       return 'Vui lòng nhập biển số xe';
     }
@@ -314,17 +315,18 @@ class _FinesPageState extends State<FinesPage> {
   }
 
   String _formatPlate(String plate, {bool isCar = false}) {
+    final value = _bloc.plateEC.text.replaceAll('-', '').replaceAll('.', '');
     if (isCar) {
-      if (plate.substring(3).length > 4) {
-        return '${plate.substring(0, 3)}-${plate.substring(3, 6)}.${plate.substring(6)}';
+      if (value.substring(3).length > 4) {
+        return '${value.substring(0, 3)}-${value.substring(3, 6)}.${value.substring(6)}';
       } else {
-        return '${plate.substring(0, 3)}-${plate.substring(3)}';
+        return '${value.substring(0, 3)}-${value.substring(3)}';
       }
     } else {
-      if (plate.substring(4).length > 4) {
-        return '${plate.substring(0, 4)}-${plate.substring(4, 7)}.${plate.substring(7)}';
+      if (value.substring(4).length > 4) {
+        return '${value.substring(0, 4)}-${value.substring(4, 7)}.${value.substring(7)}';
       } else {
-        return '${plate.substring(0, 4)}-${plate.substring(4)}';
+        return '${value.substring(0, 4)}-${value.substring(4)}';
       }
     }
   }

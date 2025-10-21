@@ -11,4 +11,6 @@ class ColorRes {
   static const Color headerColor = Colors.white;
   static const Color backgroundGreyColor = Color.fromRGBO(249, 251, 250, 1);
   static const Color backgroundWhiteColor = Colors.white;
+  static const Color transparent = Colors.transparent;
+  static const Color yellow = Colors.yellow;
 }

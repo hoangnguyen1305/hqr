@@ -1,4 +1,4 @@
-part of 'home_bloc.dart';
+part of 'gen_qr_bloc.dart';
 
 abstract class HomeEvent {}
 

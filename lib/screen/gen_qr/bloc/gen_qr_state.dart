@@ -1,11 +1,9 @@
-part of 'home_bloc.dart';
+part of 'gen_qr_bloc.dart';
 
 class HomeState extends Equatable {
   final ScreenState screenState;
   final BankData bankData;
   final List<BankData> banks;
-  final String accountNo;
-  final String accountName;
   final QrType qrType;
   final int trigger;
 
@@ -13,8 +11,6 @@ class HomeState extends Equatable {
     this.screenState = ScreenState.success,
     this.bankData = const BankData(),
     this.banks = const [],
-    this.accountNo = '123123',
-    this.accountName = 'NVH',
     this.qrType = QrType.compact2,
     this.trigger = 0,
   });
@@ -23,8 +19,6 @@ class HomeState extends Equatable {
     ScreenState? screenState,
     BankData? bankData,
     List<BankData>? banks,
-    String? accountNo,
-    String? accountName,
     QrType? qrType,
     int? trigger,
   }) {
@@ -32,21 +26,11 @@ class HomeState extends Equatable {
       screenState: screenState ?? this.screenState,
       bankData: bankData ?? this.bankData,
       banks: banks ?? this.banks,
-      accountNo: accountNo ?? this.accountNo,
-      accountName: accountName ?? this.accountName,
       qrType: qrType ?? this.qrType,
       trigger: trigger ?? this.trigger,
     );
   }
 
   @override
-  List<Object> get props => [
-    screenState,
-    bankData,
-    banks,
-    accountNo,
-    accountName,
-    qrType,
-    trigger,
-  ];
+  List<Object> get props => [screenState, bankData, banks, qrType, trigger];
 }

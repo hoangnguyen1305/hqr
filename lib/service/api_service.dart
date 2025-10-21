@@ -2,6 +2,8 @@ import 'package:hqr/contants/const_res.dart';
 import 'package:hqr/model/bank_response.dart';
 import 'package:hqr/model/generate_qr_response.dart';
 import 'package:hqr/model/mst_response.dart';
+import 'package:hqr/model/plate_response.dart';
+import 'package:hqr/model/province_response.dart';
 import 'package:hqr/model/traffic_response.dart';
 import 'package:hqr/service/dio_client.dart';
 import 'package:hqr/utils/convert_utils.dart';
@@ -55,6 +57,52 @@ class ApiService {
       );
     } catch (_) {
       return [];
+    }
+  }
+
+  Future<List<ProvinceModel>> getListProvince() async {
+    try {
+      final dio = DioClient().dio.clone();
+      dio.options.baseUrl = ConstRes.auctionDomain;
+      final response = await DioClient().dio.get(ConstRes.provinces);
+      return ConvertUtils.getList<ProvinceModel>(
+        response.data['data'],
+        ProvinceModel.fromJson,
+      );
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<PlateResponse> searchPlates({
+    required Map<String, dynamic> param,
+  }) async {
+    try {
+      final dio = DioClient().dio.clone();
+      dio.options.baseUrl = ConstRes.auctionDomain;
+      final response = await DioClient().dio.get(
+        ConstRes.search,
+        queryParameters: param,
+      );
+      return PlateResponse.fromJson(response.data);
+    } catch (_) {
+      return PlateResponse();
+    }
+  }
+
+  Future<PlateResponse> resultPlates({
+    required Map<String, dynamic> param,
+  }) async {
+    try {
+      final dio = DioClient().dio.clone();
+      dio.options.baseUrl = ConstRes.auctionDomain;
+      final response = await DioClient().dio.get(
+        ConstRes.results,
+        queryParameters: param,
+      );
+      return PlateResponse.fromJson(response.data);
+    } catch (_) {
+      return PlateResponse();
     }
   }
 }

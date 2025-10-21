@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hqr/common/custom_dialog.dart';
 import 'package:hqr/contants/color_res.dart';
 import 'package:hqr/contants/const_res.dart';
 import 'package:hqr/contants/font_size_res.dart';
+import 'package:hqr/utils/datetime_utils.dart';
 
 class CDropdown<T> extends FormField<T> {
   CDropdown({
@@ -101,9 +103,7 @@ class CDropdown<T> extends FormField<T> {
                                      ? ColorRes.backgroundWhiteColor
                                      : ColorRes.grey),
                              borderRadius: BorderRadius.circular(
-                               fromHome
-                                   ? ConstRes.defaultRadius
-                                   : ConstRes.defaultRadius,
+                               ConstRes.defaultRadius,
                              ),
                            ),
                            width: double.infinity,
@@ -550,6 +550,7 @@ class _CSearchTextFieldState extends State<CSearchTextField> {
       },
       onFieldSubmitted: (val) {
         FocusScope.of(context).unfocus();
+        if (_debounce?.isActive ?? false) _debounce?.cancel();
         widget.onSearch.call(val);
       },
       onTapOutside: (event) {
@@ -827,4 +828,475 @@ class CText extends StatelessWidget {
       ),
     );
   }
+}
+
+class CCustomDatePicker extends StatefulWidget {
+  final DateTime initialDate;
+  final DateTime minDate;
+  final DateTime maxDate;
+  final Function(DateTime) onDateSelected;
+
+  const CCustomDatePicker({
+    super.key,
+    required this.initialDate,
+    required this.minDate,
+    required this.maxDate,
+    required this.onDateSelected,
+  });
+
+  @override
+  State<CCustomDatePicker> createState() => _CCustomDatePickerState();
+}
+
+class _CCustomDatePickerState extends State<CCustomDatePicker> {
+  late int selectedDay;
+  late int selectedMonth;
+  late int selectedYear;
+
+  List<int> years = [];
+
+  late FixedExtentScrollController _dayController;
+  late FixedExtentScrollController _monthController;
+  late FixedExtentScrollController _yearController;
+
+  @override
+  void initState() {
+    super.initState();
+    final safeInitial = _getSafeInitialDate(widget.initialDate);
+    widget.onDateSelected(safeInitial);
+
+    selectedDay = safeInitial.day;
+    selectedMonth = safeInitial.month;
+    selectedYear = safeInitial.year;
+
+    years = List.generate(
+      widget.maxDate.year - widget.minDate.year + 1,
+      (index) => widget.minDate.year + index,
+    );
+
+    final initialAvailableMonths = getAvailableMonths(selectedYear);
+    final initialAvailableDays = getAvailableDays(selectedYear, selectedMonth);
+
+    _dayController = FixedExtentScrollController(
+      initialItem: initialAvailableDays.indexOf(selectedDay),
+    );
+    _monthController = FixedExtentScrollController(
+      initialItem: initialAvailableMonths.indexOf(selectedMonth),
+    );
+    _yearController = FixedExtentScrollController(
+      initialItem: years.indexOf(selectedYear),
+    );
+  }
+
+  @override
+  void dispose() {
+    _dayController.dispose();
+    _monthController.dispose();
+    _yearController.dispose();
+    super.dispose();
+  }
+
+  DateTime _getSafeInitialDate(DateTime? input) {
+    if (input == null) return widget.minDate;
+    if (input.isBefore(widget.minDate)) return widget.minDate;
+    if (input.isAfter(widget.maxDate)) return widget.maxDate;
+    return input;
+  }
+
+  int daysInMonth(int year, int month) => DateTime(year, month + 1, 0).day;
+
+  List<int> getAvailableMonths(int year) {
+    if (year == widget.minDate.year && year == widget.maxDate.year) {
+      return List.generate(
+        widget.maxDate.month - widget.minDate.month + 1,
+        (i) => widget.minDate.month + i,
+      );
+    } else if (year == widget.minDate.year) {
+      return List.generate(
+        12 - widget.minDate.month + 1,
+        (i) => widget.minDate.month + i,
+      );
+    } else if (year == widget.maxDate.year) {
+      return List.generate(widget.maxDate.month, (i) => i + 1);
+    } else {
+      return List.generate(12, (i) => i + 1);
+    }
+  }
+
+  List<int> getAvailableDays(int year, int month) {
+    final totalDays = daysInMonth(year, month);
+    if (year == widget.minDate.year &&
+        month == widget.minDate.month &&
+        year == widget.maxDate.year &&
+        month == widget.maxDate.month) {
+      return List.generate(
+        widget.maxDate.day - widget.minDate.day + 1,
+        (i) => widget.minDate.day + i,
+      );
+    } else if (year == widget.minDate.year && month == widget.minDate.month) {
+      return List.generate(
+        totalDays - widget.minDate.day + 1,
+        (i) => widget.minDate.day + i,
+      );
+    } else if (year == widget.maxDate.year && month == widget.maxDate.month) {
+      return List.generate(widget.maxDate.day, (i) => i + 1);
+    } else {
+      return List.generate(totalDays, (i) => i + 1);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final availableMonths = getAvailableMonths(selectedYear);
+    final availableDays = getAvailableDays(selectedYear, selectedMonth);
+
+    return Column(
+      children: [
+        const SizedBox(height: ConstRes.defaultVertical),
+        Row(
+          children: [
+            const Expanded(child: SizedBox.shrink()),
+            Expanded(
+              flex: 2,
+              child: CText(
+                text: 'Ngày',
+                fontSize: FontSizeRes.body,
+                color: ColorRes.primaryColor,
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: CText(
+                text: 'Tháng',
+                fontSize: FontSizeRes.body,
+                color: ColorRes.primaryColor,
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: CText(
+                text: 'Năm',
+                fontSize: FontSizeRes.body,
+                color: ColorRes.primaryColor,
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const Expanded(child: SizedBox.shrink()),
+          ],
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              const Expanded(child: SizedBox.shrink()),
+              Expanded(
+                flex: 2,
+                child: CupertinoPicker(
+                  scrollController: _dayController,
+                  itemExtent: 40,
+                  selectionOverlay:
+                      const CupertinoPickerDefaultSelectionOverlay(
+                        background: ColorRes.transparent,
+                      ),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      selectedDay = availableDays[index];
+                      widget.onDateSelected(
+                        DateTime(selectedYear, selectedMonth, selectedDay),
+                      );
+                    });
+                  },
+                  children: List.generate(availableDays.length, (i) {
+                    final day = availableDays[i];
+                    return _buildPickerItem(
+                      '$day'.padLeft(2, '0'),
+                      day == selectedDay,
+                      type: 0,
+                    );
+                  }),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: CupertinoPicker(
+                  scrollController: _monthController,
+                  itemExtent: 40,
+                  selectionOverlay:
+                      const CupertinoPickerDefaultSelectionOverlay(
+                        background: ColorRes.transparent,
+                      ),
+                  onSelectedItemChanged: (index) {
+                    final newMonth = availableMonths[index];
+                    int finalDay = selectedDay;
+                    final newAvailableDays = getAvailableDays(
+                      selectedYear,
+                      newMonth,
+                    );
+                    if (!newAvailableDays.contains(finalDay)) {
+                      finalDay = newAvailableDays.first;
+                    }
+                    setState(() {
+                      selectedMonth = newMonth;
+                      selectedDay = finalDay;
+                      widget.onDateSelected(
+                        DateTime(selectedYear, selectedMonth, selectedDay),
+                      );
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final int targetDayIndex = newAvailableDays.indexOf(
+                        finalDay,
+                      );
+                      if (_dayController.selectedItem != targetDayIndex) {
+                        _dayController.animateToItem(
+                          targetDayIndex,
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    });
+                  },
+                  children: List.generate(availableMonths.length, (i) {
+                    final month = availableMonths[i];
+                    return _buildPickerItem(
+                      '$month'.padLeft(2, '0'),
+                      month == selectedMonth,
+                      type: 1,
+                    );
+                  }),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: CupertinoPicker(
+                  scrollController: _yearController,
+                  itemExtent: 40,
+                  selectionOverlay:
+                      const CupertinoPickerDefaultSelectionOverlay(
+                        background: ColorRes.transparent,
+                      ),
+                  onSelectedItemChanged: (index) {
+                    final newYear = years[index];
+                    int finalMonth = selectedMonth;
+                    final newAvailableMonths = getAvailableMonths(newYear);
+                    if (!newAvailableMonths.contains(finalMonth)) {
+                      finalMonth = newAvailableMonths.first;
+                    }
+
+                    int finalDay = selectedDay;
+                    final newAvailableDays = getAvailableDays(
+                      newYear,
+                      finalMonth,
+                    );
+                    if (!newAvailableDays.contains(finalDay)) {
+                      finalDay = newAvailableDays.first;
+                    }
+                    setState(() {
+                      selectedYear = newYear;
+                      selectedMonth = finalMonth;
+                      selectedDay = finalDay;
+                      widget.onDateSelected(
+                        DateTime(selectedYear, selectedMonth, selectedDay),
+                      );
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final int targetMonthIndex = newAvailableMonths.indexOf(
+                        finalMonth,
+                      );
+                      if (_monthController.selectedItem != targetMonthIndex) {
+                        _monthController.animateToItem(
+                          targetMonthIndex,
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                      final int targetDayIndex = newAvailableDays.indexOf(
+                        finalDay,
+                      );
+                      if (_dayController.selectedItem != targetDayIndex) {
+                        _dayController.animateToItem(
+                          targetDayIndex,
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    });
+                  },
+                  children: List.generate(years.length, (i) {
+                    final year = years[i];
+                    return _buildPickerItem(
+                      '$year',
+                      year == selectedYear,
+                      type: 2,
+                    );
+                  }),
+                ),
+              ),
+              const Expanded(child: SizedBox.shrink()),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPickerItem(String text, bool isSelected, {required int type}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isSelected ? ColorRes.grey : ColorRes.transparent,
+        borderRadius: _getBorderRadius(type),
+      ),
+      alignment: Alignment.center,
+      child: CText(
+        text: text,
+        fontSize: FontSizeRes.header,
+        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        color: isSelected ? ColorRes.textColor : ColorRes.grey,
+      ),
+    );
+  }
+
+  BorderRadius? _getBorderRadius(int type) {
+    switch (type) {
+      case 0:
+        return const BorderRadius.horizontal(
+          left: Radius.circular(ConstRes.defaultRadius),
+        );
+      case 1:
+        return null;
+      default:
+        return const BorderRadius.horizontal(
+          right: Radius.circular(ConstRes.defaultRadius),
+        );
+    }
+  }
+}
+
+class CInputDateForm extends FormField<DateTime> {
+  CInputDateForm({
+    super.key,
+    required String title,
+    required bool isRequired,
+    String hintText = '',
+    bool limitEndDate = false,
+    bool limitStartDate = false,
+    DateTime? startDate,
+    DateTime? endDate,
+    required BuildContext context,
+    super.enabled = true,
+    super.initialValue,
+    required super.onSaved,
+    super.validator,
+  }) : super(
+         builder: (FormFieldState<DateTime> state) {
+           return IgnorePointer(
+             ignoring: !enabled,
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Text.rich(
+                   maxLines: 3,
+                   textAlign: TextAlign.start,
+                   TextSpan(
+                     text: title,
+                     style: const TextStyle(
+                       fontSize: FontSizeRes.subBody,
+                       fontWeight: FontWeight.w600,
+                       color: ColorRes.textColor,
+                     ),
+                     children: [
+                       if (isRequired)
+                         const TextSpan(
+                           text: ' *',
+                           style: TextStyle(
+                             color: ColorRes.red,
+                             fontSize: FontSizeRes.subBody,
+                             fontWeight: FontWeight.w600,
+                           ),
+                         ),
+                     ],
+                   ),
+                 ),
+                 const SizedBox(height: 6),
+                 GestureDetector(
+                   behavior: HitTestBehavior.translucent,
+                   onTap: () async {
+                     final picked = await DateTimeUtils.pickerDate(
+                       context: context,
+                       title: title,
+                       initialDate: initialValue,
+                       minDate: limitStartDate ? startDate : null,
+                       maxDate: limitEndDate ? endDate : null,
+                     );
+                     if (picked != null) {
+                       state.didChange(picked);
+                       onSaved?.call(picked);
+                     }
+                   },
+                   child: Container(
+                     decoration: BoxDecoration(
+                       border: Border.all(
+                         color: state.hasError ? ColorRes.red : ColorRes.grey,
+                         width: 1,
+                       ),
+                       color:
+                           enabled
+                               ? ColorRes.backgroundWhiteColor
+                               : ColorRes.grey,
+                       borderRadius: BorderRadius.circular(
+                         ConstRes.defaultRadius,
+                       ),
+                     ),
+                     width: double.infinity,
+                     height: 50,
+                     alignment: Alignment.centerLeft,
+                     child: Row(
+                       children: [
+                         const SizedBox(width: 10),
+                         Expanded(
+                           child: CText(
+                             text:
+                                 initialValue == null
+                                     ? 'YYYY-MM-DD'
+                                     : DateTimeUtils.getStringDate(
+                                       initialValue,
+                                     ),
+                             fontSize:
+                                 initialValue == null
+                                     ? FontSizeRes.subBody
+                                     : FontSizeRes.body,
+                             color:
+                                 initialValue == null
+                                     ? ColorRes.grey
+                                     : ColorRes.textColor,
+                           ),
+                         ),
+                         const SizedBox(width: 10),
+                         Icon(
+                           Icons.date_range_rounded,
+                           size: 25,
+                           color: ColorRes.grey,
+                         ),
+                         const SizedBox(width: 10),
+                       ],
+                     ),
+                   ),
+                 ),
+                 if (state.hasError)
+                   Padding(
+                     padding: const EdgeInsets.only(top: 5),
+                     child: CText(
+                       text: state.errorText!,
+                       color: ColorRes.red,
+                       fontSize: FontSizeRes.subBody,
+                     ),
+                   ),
+               ],
+             ),
+           );
+         },
+       );
 }

@@ -10,6 +10,11 @@ class ConstRes {
       'https://dev-api.wayfindy.com/TrafficViolation/check-license-plate';
   static const String trafficApiKey = '2BBg9G0YeftxkSyq3hcIIUHDr6QCFS04';
 
+  static const String auctionDomain = 'https://vpa.com.vn/v2/public/';
+  static const String provinces = 'provinces';
+  static const String search = 'plates/search';
+  static const String results = 'results/search';
+
   static const String appName = 'HQR';
 
   // constant
