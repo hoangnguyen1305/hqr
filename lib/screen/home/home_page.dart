@@ -36,53 +36,49 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(
           children: [
+            SizedBox(height: 20),
+            TimeUI(),
+            SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 20),
-                    TimeUI(),
-                    SizedBox(height: 20),
-                    Center(
-                      child: Column(
-                        children: [
-                          _buildItemMenu(
-                            title: 'Tạo QR thanh toán',
-                            icon: Icons.qr_code,
-                            onTap: () => GenQRPage.navigate(context),
-                          ),
-                          SizedBox(height: ConstRes.defaultVertical),
-                          _buildItemMenu(
-                            title: 'Mã số thuế',
-                            icon: Icons.numbers_rounded,
-                            onTap: () => TaxCodePage.navigate(context),
-                          ),
-                          SizedBox(height: ConstRes.defaultVertical),
-                          _buildItemMenu(
-                            title: 'Kiểm tra phạt nguội',
-                            icon: Icons.price_check_rounded,
-                            onTap: () => FinesPage.navigate(context),
-                          ),
-                          SizedBox(height: ConstRes.defaultVertical),
-                          _buildItemMenu(
-                            title: 'Danh sách biển số',
-                            icon: Icons.list,
-                            onTap: () => ListPlatePage.navigate(context),
-                          ),
-                          SizedBox(height: ConstRes.defaultVertical),
-                          _buildItemMenu(
-                            title: 'Kết quả đấu giá',
-                            icon: Icons.wysiwyg_rounded,
-                            onTap: () => ResultPlatePage.navigate(context),
-                          ),
-                        ],
-                      ),
+                    _buildItemMenu(
+                      title: 'Tạo QR thanh toán',
+                      icon: Icons.qr_code,
+                      onTap: () => GenQRPage.navigate(context),
+                    ),
+                    SizedBox(height: ConstRes.defaultVertical),
+                    _buildItemMenu(
+                      title: 'Mã số thuế',
+                      icon: Icons.numbers_rounded,
+                      onTap: () => TaxCodePage.navigate(context),
+                    ),
+                    SizedBox(height: ConstRes.defaultVertical),
+                    _buildItemMenu(
+                      title: 'Kiểm tra phạt nguội',
+                      icon: Icons.price_check_rounded,
+                      onTap: () => FinesPage.navigate(context),
+                    ),
+                    SizedBox(height: ConstRes.defaultVertical),
+                    _buildItemMenu(
+                      title: 'Danh sách biển số',
+                      icon: Icons.list,
+                      onTap: () => ListPlatePage.navigate(context),
+                    ),
+                    SizedBox(height: ConstRes.defaultVertical),
+                    _buildItemMenu(
+                      title: 'Kết quả đấu giá',
+                      icon: Icons.wysiwyg_rounded,
+                      onTap: () => ResultPlatePage.navigate(context),
                     ),
                   ],
                 ),
               ),
             ),
-
             SizedBox(height: MediaQuery.of(context).padding.bottom),
           ],
         ),

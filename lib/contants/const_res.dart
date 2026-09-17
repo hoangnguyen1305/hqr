@@ -15,7 +15,7 @@ class ConstRes {
   static const String search = 'plates/search';
   static const String results = 'results/search';
 
-  static const String appName = 'HQR';
+static const String appName = 'Super Hidro';
 
   // constant
   static const double defaultRadius = 10;

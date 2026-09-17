@@ -131,56 +131,59 @@ class _ResultPlatePageState extends State<ResultPlatePage> {
                   );
                 },
               ),
-              const SizedBox(height: ConstRes.defaultVertical),
-              Row(
-                children: [
-                  Expanded(
-                    child: BlocBuilder<ResultPlateBloc, ResultPlateState>(
-                      buildWhen:
-                          (pre, cur) =>
-                              pre.startDate != cur.startDate ||
-                              pre.endDate != cur.endDate,
-                      builder: (ctx, state) {
-                        return CInputDateForm(
-                          isRequired: false,
-                          title: 'Ngày bắt đầu',
-                          hintText: 'Nhập ngày bắt đầu',
-                          limitEndDate: true,
-                          initialValue: state.startDate,
-                          endDate: state.endDate,
-                          context: context,
-                          onSaved: (val) {
-                            _bloc.add(OnSearch(startDate: val));
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: ConstRes.defaultHorizontal),
-                  Expanded(
-                    child: BlocBuilder<ResultPlateBloc, ResultPlateState>(
-                      buildWhen:
-                          (pre, cur) =>
-                              pre.startDate != cur.startDate ||
-                              pre.endDate != cur.endDate,
-                      builder: (ctx, state) {
-                        return CInputDateForm(
-                          isRequired: false,
-                          title: 'Ngày kết thúc',
-                          hintText: 'Nhập ngày kết thúc',
-                          limitStartDate: true,
-                          initialValue: state.endDate,
-                          startDate: state.startDate,
-                          context: context,
-                          onSaved: (val) {
-                            _bloc.add(OnSearch(endDate: val));
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              // const SizedBox(height: ConstRes.defaultVertical),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: BlocBuilder<ResultPlateBloc, ResultPlateState>(
+              //         buildWhen:
+              //             (pre, cur) =>
+              //                 pre.startDate != cur.startDate ||
+              //                 pre.endDate != cur.endDate,
+              //         builder: (ctx, state) {
+              //           return CInputDateForm(
+              //             isRequired: false,
+              //             title: 'Ngày bắt đầu',
+              //             hintText: 'Nhập ngày bắt đầu',
+              //             limitEndDate: true,
+              //             limitStartDate: true,
+              //             initialValue: state.startDate,
+              //             endDate: state.endDate ?? DateTimeUtils.getDateNowEnd,
+              //             context: context,
+              //             onSaved: (val) {
+              //               _bloc.add(OnSearch(startDate: val));
+              //             },
+              //           );
+              //         },
+              //       ),
+              //     ),
+              //     const SizedBox(width: ConstRes.defaultHorizontal),
+              //     Expanded(
+              //       child: BlocBuilder<ResultPlateBloc, ResultPlateState>(
+              //         buildWhen:
+              //             (pre, cur) =>
+              //                 pre.startDate != cur.startDate ||
+              //                 pre.endDate != cur.endDate,
+              //         builder: (ctx, state) {
+              //           return CInputDateForm(
+              //             isRequired: false,
+              //             title: 'Ngày kết thúc',
+              //             hintText: 'Nhập ngày kết thúc',
+              //             limitStartDate: true,
+              //             initialValue: state.endDate,
+              //             startDate:
+              //                 state.startDate ?? DateTimeUtils.getDateNowStart,
+              //             endDate: DateTimeUtils.getDateNowEnd,
+              //             context: context,
+              //             onSaved: (val) {
+              //               _bloc.add(OnSearch(endDate: val));
+              //             },
+              //           );
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: ConstRes.defaultVertical),
               Expanded(child: ResultPlate()),
             ],

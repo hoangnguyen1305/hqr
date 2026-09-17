@@ -40,7 +40,7 @@ class ResultPlateBloc extends Bloc<ListPlateEvent, ResultPlateState> {
           'startDate': DateTimeUtils.getStringDateApi(state.startDate),
         if (state.endDate != null)
           'endDate': DateTimeUtils.getStringDateApi(state.endDate),
-        'sortBy': 'auction_price',
+        'sortBy': 'auction_time',
         'sortOrder': state.sortBy.keys,
       };
       final res = await Future.wait([
@@ -98,7 +98,7 @@ class ResultPlateBloc extends Bloc<ListPlateEvent, ResultPlateState> {
         'q': state.plateNumber,
         if (!state.selectedProvince.isAll)
           'provinceCode': state.selectedProvince.code,
-        'sortBy': 'auction_price',
+        'sortBy': 'auction_time',
         'sortOrder': state.sortBy.keys,
       };
       final res = await ApiService().resultPlates(param: param);
@@ -136,14 +136,14 @@ class ResultPlateBloc extends Bloc<ListPlateEvent, ResultPlateState> {
         'vehicle': state.vehicleType.keys,
         if (!state.plateColor.isAll && state.vehicleType.isCar)
           'color': state.plateColor.idx,
-        if (state.startDate != null)
-          'startDate': DateTimeUtils.getStringDateApi(state.startDate),
-        if (state.endDate != null)
-          'endDate': DateTimeUtils.getStringDateApi(state.endDate),
+        // if (state.startDate != null)
+        //   'startDate': DateTimeUtils.getStringDateApi(state.startDate),
+        // if (state.endDate != null)
+        //   'endDate': DateTimeUtils.getStringDateApi(state.endDate),
         'q': state.plateNumber,
         if (!state.selectedProvince.isAll)
           'provinceCode': state.selectedProvince.code,
-        'sortBy': 'auction_price',
+        'sortBy': 'auction_time',
         'sortOrder': state.sortBy.keys,
       };
       final res = await ApiService().resultPlates(param: param);
