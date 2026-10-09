@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:hqr/contants/color_res.dart';
 import 'package:hqr/contants/const_res.dart';
 import 'package:hqr/contants/font_size_res.dart';
+import 'package:hqr/screen/doul/doul_page.dart';
 import 'package:hqr/screen/fines/fines_page.dart';
 import 'package:hqr/screen/gen_qr/gen_qr_page.dart';
 import 'package:hqr/screen/list_plate/list_plate_page.dart';
@@ -74,6 +75,12 @@ class _HomePageState extends State<HomePage> {
                       title: 'Kết quả đấu giá',
                       icon: Icons.wysiwyg_rounded,
                       onTap: () => ResultPlatePage.navigate(context),
+                    ),
+                    SizedBox(height: ConstRes.defaultVertical),
+                    _buildItemMenu(
+                      title: 'Danh sách Doul',
+                      icon: Icons.splitscreen_rounded,
+                      onTap: () => ListDoulPage.navigate(context),
                     ),
                   ],
                 ),

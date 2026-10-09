@@ -128,16 +128,16 @@ class _ResultPlateState extends State<ResultPlate> {
             children: [
               Expanded(
                 child: CText(
-                  text:
-                      'Giá trúng đấu giá:\n${CurrencyUtils.format(plate.auctionPrice)}',
+                  text: CurrencyUtils.format(plate.auctionPrice),
                   maxLines: 10,
                 ),
               ),
               const SizedBox(width: ConstRes.defaultHorizontal),
               Expanded(
                 child: CText(
-                  text:
-                      'Thời gian đấu giá:\n${DateTimeUtils.getFullDateTime(DateTimeUtils.getDateTime(plate.auctionStartTime))}',
+                  text: DateTimeUtils.getFullDateTime(
+                    DateTimeUtils.getDateTime(plate.auctionStartTime),
+                  ),
                   maxLines: 10,
                 ),
               ),

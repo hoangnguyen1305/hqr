@@ -12,15 +12,21 @@ import 'package:hqr/utils/enum.dart';
 part 'widgets/result_plate.dart';
 
 class ResultPlatePage extends StatefulWidget {
-  const ResultPlatePage({super.key});
+  final bool showAppBar;
+  const ResultPlatePage({super.key, this.showAppBar = true});
 
   @override
   State<ResultPlatePage> createState() => _ResultPlatePageState();
 
-  static Future<dynamic> navigate(BuildContext context) {
+  static Future<dynamic> navigate(
+    BuildContext context, {
+    bool showAppBar = true,
+  }) {
     return Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ResultPlatePage()),
+      MaterialPageRoute(
+        builder: (context) => ResultPlatePage(showAppBar: showAppBar),
+      ),
     );
   }
 }
@@ -40,16 +46,21 @@ class _ResultPlatePageState extends State<ResultPlatePage> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: CAppBar(title: 'Kết quả đấu giá', centerTitle: true),
+        appBar:
+            widget.showAppBar
+                ? CAppBar(title: 'Kết quả đấu giá', centerTitle: true)
+                : null,
         backgroundColor: ColorRes.backgroundWhiteColor,
         body: Padding(
           padding: EdgeInsets.only(
             left: ConstRes.defaultHorizontal,
             right: ConstRes.defaultHorizontal,
-            top: ConstRes.defaultVertical,
+            top: widget.showAppBar ? ConstRes.defaultVertical : 0,
             bottom:
-                ConstRes.defaultVertical +
-                MediaQuery.of(context).padding.bottom,
+                widget.showAppBar
+                    ? (ConstRes.defaultVertical +
+                        MediaQuery.of(context).padding.bottom)
+                    : 0,
           ),
           child: Column(
             children: [

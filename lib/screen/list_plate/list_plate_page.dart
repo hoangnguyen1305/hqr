@@ -12,15 +12,21 @@ import 'package:hqr/utils/enum.dart';
 part 'widgets/list_plate.dart';
 
 class ListPlatePage extends StatefulWidget {
-  const ListPlatePage({super.key});
+  final bool showAppBar;
+  const ListPlatePage({super.key, this.showAppBar = true});
 
   @override
   State<ListPlatePage> createState() => _ListPlatePageState();
 
-  static Future<dynamic> navigate(BuildContext context) {
+  static Future<dynamic> navigate(
+    BuildContext context, {
+    bool showAppBar = true,
+  }) {
     return Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ListPlatePage()),
+      MaterialPageRoute(
+        builder: (context) => ListPlatePage(showAppBar: showAppBar),
+      ),
     );
   }
 }
@@ -40,16 +46,21 @@ class _ListPlatePageState extends State<ListPlatePage> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: CAppBar(title: 'Danh sách biển số', centerTitle: true),
+        appBar:
+            widget.showAppBar
+                ? CAppBar(title: 'Danh sách biển số', centerTitle: true)
+                : null,
         backgroundColor: ColorRes.backgroundWhiteColor,
         body: Padding(
           padding: EdgeInsets.only(
             left: ConstRes.defaultHorizontal,
             right: ConstRes.defaultHorizontal,
-            top: ConstRes.defaultVertical,
+            top: widget.showAppBar ? ConstRes.defaultVertical : 0,
             bottom:
-                ConstRes.defaultVertical +
-                MediaQuery.of(context).padding.bottom,
+                widget.showAppBar
+                    ? (ConstRes.defaultVertical +
+                        MediaQuery.of(context).padding.bottom)
+                    : 0,
           ),
           child: Column(
             children: [
@@ -130,56 +141,6 @@ class _ListPlatePageState extends State<ListPlatePage> {
                     ],
                   );
                 },
-              ),
-              const SizedBox(height: ConstRes.defaultVertical),
-              Row(
-                children: [
-                  Expanded(
-                    child: BlocBuilder<ListPlateBloc, ListPlateState>(
-                      buildWhen:
-                          (pre, cur) =>
-                              pre.startDate != cur.startDate ||
-                              pre.endDate != cur.endDate,
-                      builder: (ctx, state) {
-                        return CInputDateForm(
-                          isRequired: false,
-                          title: 'Ngày bắt đầu',
-                          hintText: 'Nhập ngày bắt đầu',
-                          limitEndDate: true,
-                          initialValue: state.startDate,
-                          endDate: state.endDate,
-                          context: context,
-                          onSaved: (val) {
-                            _bloc.add(OnSearch(startDate: val));
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: ConstRes.defaultHorizontal),
-                  Expanded(
-                    child: BlocBuilder<ListPlateBloc, ListPlateState>(
-                      buildWhen:
-                          (pre, cur) =>
-                              pre.startDate != cur.startDate ||
-                              pre.endDate != cur.endDate,
-                      builder: (ctx, state) {
-                        return CInputDateForm(
-                          isRequired: false,
-                          title: 'Ngày kết thúc',
-                          hintText: 'Nhập ngày kết thúc',
-                          limitStartDate: true,
-                          initialValue: state.endDate,
-                          startDate: state.startDate,
-                          context: context,
-                          onSaved: (val) {
-                            _bloc.add(OnSearch(endDate: val));
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
               ),
               const SizedBox(height: ConstRes.defaultVertical),
               Expanded(child: ListPlate()),

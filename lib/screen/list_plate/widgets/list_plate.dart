@@ -126,8 +126,7 @@ class _ListPlateState extends State<ListPlate> {
             children: [
               Expanded(
                 child: CText(
-                  text:
-                      'Giá khởi điểm:\n${CurrencyUtils.format(plate.startingPrice)}',
+                  text: CurrencyUtils.format(plate.startingPrice),
                   maxLines: 10,
                 ),
               ),
@@ -135,7 +134,7 @@ class _ListPlateState extends State<ListPlate> {
               Expanded(
                 child: CText(
                   text:
-                      'Thời gian đấu giá:\n${DateTimeUtils.getFullDateTime(DateTimeUtils.getDateTime(plate.auctionStartTime))}',
+                      DateTimeUtils.getFullDateTime(DateTimeUtils.getDateTime(plate.auctionStartTime)),
                   maxLines: 10,
                 ),
               ),

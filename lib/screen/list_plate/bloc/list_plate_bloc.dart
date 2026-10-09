@@ -34,7 +34,7 @@ class ListPlateBloc extends Bloc<ListPlateEvent, ListPlateState> {
         'page': currentPage,
         'take': take,
         'vehicle': state.vehicleType.keys,
-        'status': 'waiting_auction',
+        // 'status': 'published',
         if (!state.plateColor.isAll && state.vehicleType.isCar)
           'color': state.plateColor.idx,
         if (state.startDate != null)
@@ -87,7 +87,7 @@ class ListPlateBloc extends Bloc<ListPlateEvent, ListPlateState> {
         'page': currentPage,
         'take': take,
         'vehicle': state.vehicleType.keys,
-        'status': 'waiting_auction',
+        // 'status': 'published',
         if (!state.plateColor.isAll && state.vehicleType.isCar)
           'color': state.plateColor.idx,
         if (state.startDate != null)
@@ -131,7 +131,7 @@ class ListPlateBloc extends Bloc<ListPlateEvent, ListPlateState> {
         'page': currentPage,
         'take': take,
         'vehicle': state.vehicleType.keys,
-        'status': 'waiting_auction',
+        // 'status': 'published',
         if (!state.plateColor.isAll && state.vehicleType.isCar)
           'color': state.plateColor.idx,
         if (state.startDate != null)

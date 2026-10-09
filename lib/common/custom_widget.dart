@@ -107,7 +107,7 @@ class CDropdown<T> extends FormField<T> {
                              ),
                            ),
                            width: double.infinity,
-                           height: 50,
+                           height: 40,
                            alignment: Alignment.centerLeft,
                            child: Row(
                              children: [
@@ -122,7 +122,7 @@ class CDropdown<T> extends FormField<T> {
                                    fontSize:
                                        selectedValue == null
                                            ? FontSizeRes.subBody
-                                           : FontSizeRes.body,
+                                           : FontSizeRes.subBody,
                                    color:
                                        selectedValue == null
                                            ? ColorRes.grey
@@ -535,94 +535,97 @@ class _CSearchTextFieldState extends State<CSearchTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      onChanged: (val) {
-        if (val.isEmpty) {
-          hasClose = false;
-        } else {
-          hasClose = true;
-        }
-        setState(() {});
-        if (_debounce?.isActive ?? false) _debounce?.cancel();
-        _debounce = Timer(const Duration(milliseconds: 1000), () {
+    return SizedBox(
+      height: 40.0,
+      child: TextFormField(
+        onChanged: (val) {
+          if (val.isEmpty) {
+            hasClose = false;
+          } else {
+            hasClose = true;
+          }
+          setState(() {});
+          if (_debounce?.isActive ?? false) _debounce?.cancel();
+          _debounce = Timer(const Duration(milliseconds: 1000), () {
+            widget.onSearch.call(val);
+          });
+        },
+        onFieldSubmitted: (val) {
+          FocusScope.of(context).unfocus();
+          if (_debounce?.isActive ?? false) _debounce?.cancel();
           widget.onSearch.call(val);
-        });
-      },
-      onFieldSubmitted: (val) {
-        FocusScope.of(context).unfocus();
-        if (_debounce?.isActive ?? false) _debounce?.cancel();
-        widget.onSearch.call(val);
-      },
-      onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      focusNode: widget.focusNode,
-      inputFormatters: widget.inputFormatters,
-      style: const TextStyle(
-        fontSize: FontSizeRes.body,
-        color: ColorRes.textColor,
+        },
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        focusNode: widget.focusNode,
+        inputFormatters: widget.inputFormatters,
+        style: const TextStyle(
+          fontSize: FontSizeRes.body,
+          color: ColorRes.textColor,
+        ),
+        decoration: InputDecoration(
+          fillColor: widget.backgroundColor,
+          filled: widget.backgroundColor != null,
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(ConstRes.defaultRadius),
+            ),
+            borderSide: BorderSide(color: ColorRes.grey, width: 1),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(ConstRes.defaultRadius),
+            ),
+            borderSide: BorderSide(color: ColorRes.grey, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(ConstRes.defaultRadius),
+            borderSide: const BorderSide(color: ColorRes.grey, width: 1),
+          ),
+          errorStyle: const TextStyle(
+            color: ColorRes.red,
+            fontSize: FontSizeRes.subBody - 2,
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(ConstRes.defaultRadius),
+            ),
+            borderSide: BorderSide(color: ColorRes.red, width: 1),
+          ),
+          counterText: '',
+          hintText: widget.hintText,
+          hintStyle: const TextStyle(
+            color: ColorRes.grey,
+            fontSize: FontSizeRes.subBody,
+          ),
+          prefix:
+              widget.icon == null
+                  ? const Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: SizedBox.shrink(),
+                  )
+                  : null,
+          prefixIcon: widget.icon,
+          suffix: const Padding(padding: EdgeInsets.only(right: 10)),
+          contentPadding: const EdgeInsets.symmetric(vertical: 2.5),
+          isDense: true,
+          suffixIcon:
+              hasClose
+                  ? IconButton(
+                    icon: const Icon(Icons.close_rounded, color: ColorRes.grey),
+                    onPressed: () {
+                      hasClose = false;
+                      _controller.clear();
+                      FocusScope.of(context).unfocus();
+                      setState(() {});
+                      widget.onSearch.call('');
+                    },
+                  )
+                  : const SizedBox.shrink(),
+        ),
+        controller: _controller,
       ),
-      decoration: InputDecoration(
-        fillColor: widget.backgroundColor,
-        filled: widget.backgroundColor != null,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(ConstRes.defaultRadius),
-          ),
-          borderSide: BorderSide(color: ColorRes.grey, width: 1),
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(ConstRes.defaultRadius),
-          ),
-          borderSide: BorderSide(color: ColorRes.grey, width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ConstRes.defaultRadius),
-          borderSide: const BorderSide(color: ColorRes.grey, width: 1),
-        ),
-        errorStyle: const TextStyle(
-          color: ColorRes.red,
-          fontSize: FontSizeRes.subBody - 2,
-        ),
-        errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(ConstRes.defaultRadius),
-          ),
-          borderSide: BorderSide(color: ColorRes.red, width: 1),
-        ),
-        counterText: '',
-        hintText: widget.hintText,
-        hintStyle: const TextStyle(
-          color: ColorRes.grey,
-          fontSize: FontSizeRes.subBody,
-        ),
-        prefix:
-            widget.icon == null
-                ? const Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: SizedBox.shrink(),
-                )
-                : null,
-        prefixIcon: widget.icon,
-        suffix: const Padding(padding: EdgeInsets.only(right: 10)),
-        contentPadding: const EdgeInsets.symmetric(vertical: 12.5),
-        isDense: true,
-        suffixIcon:
-            hasClose
-                ? IconButton(
-                  icon: const Icon(Icons.close_rounded, color: ColorRes.grey),
-                  onPressed: () {
-                    hasClose = false;
-                    _controller.clear();
-                    FocusScope.of(context).unfocus();
-                    setState(() {});
-                    widget.onSearch.call('');
-                  },
-                )
-                : const SizedBox.shrink(),
-      ),
-      controller: _controller,
     );
   }
 }
@@ -801,7 +804,7 @@ class CText extends StatelessWidget {
   const CText({
     super.key,
     required this.text,
-    this.fontSize = FontSizeRes.body,
+    this.fontSize = 14,
     this.fontWeight = FontWeight.normal,
     this.textAlign = TextAlign.start,
     this.color = ColorRes.textColor,
